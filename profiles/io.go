@@ -13,7 +13,7 @@ func (m Manager[T]) initProfiles() profileCollection[T] {
 	// init empty profiles
 	profiles := profileCollection[T]{
 		Current:  "default",
-		Profiles: map[string]T{"default": *new(T)},
+		Profiles: map[string]Profile[T]{"default": *new(Profile[T])},
 	}
 	m.saveProfiles(profiles, true)
 
@@ -23,7 +23,7 @@ func (m Manager[T]) initProfiles() profileCollection[T] {
 func (m Manager[T]) loadProfiles() profileCollection[T] {
 
 	col := profileCollection[T]{
-		Profiles: map[string]T{},
+		Profiles: map[string]Profile[T]{},
 	}
 
 	// load file

@@ -6,16 +6,14 @@ const (
 )
 
 type profileCollection[T any] struct {
-	Current  string       `yaml:"current"`
-	Profiles map[string]T `yaml:"profiles"`
+	Current  string                `yaml:"current"`
+	Profiles map[string]Profile[T] `yaml:"profiles"`
 }
 
-func (s profileCollection[T]) getProfile(profileName string) (T, bool) {
-	var empty T
+func (s profileCollection[T]) getProfile(profileName string) (Profile[T], bool) {
 	profile, ok := s.Profiles[profileName]
 	if !ok {
-		return empty, false
+		return *new(Profile[T]), false
 	}
-	//profile.Profile = profileName
 	return profile, ok
 }

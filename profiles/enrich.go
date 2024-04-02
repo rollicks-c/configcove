@@ -5,11 +5,11 @@ import (
 	"github.com/rollicks-c/secretblend"
 )
 
-func (m Manager[T]) inject(profile T) T {
+func (m Manager[T]) inject(profileData T) T {
 	//secretblend.AddProvider(vt.AsProvider(), "vault://")
-	enrichedProfile, err := secretblend.Inject(profile)
+	enrichedData, err := secretblend.Inject(profileData)
 	if err != nil {
 		panic(fmt.Sprintf("error injecting secrets: %s", err))
 	}
-	return enrichedProfile
+	return enrichedData
 }

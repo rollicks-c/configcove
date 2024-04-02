@@ -5,6 +5,11 @@ import (
 	"sort"
 )
 
+type Profile[T any] struct {
+	Name string `yaml:"name"`
+	Data T      `yaml:"data"`
+}
+
 type Option[T any] func(manager *Manager[T])
 
 type Manager[T any] struct {
@@ -12,9 +17,9 @@ type Manager[T any] struct {
 	defaultProfile T
 }
 
-func WithDefault[T any](profile T) Option[T] {
+func WithDefault[T any](profileData T) Option[T] {
 	return func(manager *Manager[T]) {
-		manager.defaultProfile = profile
+		manager.defaultProfile = profileData
 	}
 }
 
@@ -28,12 +33,12 @@ func NewManager[T any](appName string, options ...Option[T]) *Manager[T] {
 	return m
 }
 
-func (m Manager[T]) LoadCurrent() T {
+func (m Manager[T]) LoadCurrent() Profile[T] {
 	profiles := m.loadProfiles()
 	return m.Load(profiles.Current)
 }
 
-func (m Manager[T]) Load(name string) T {
+func (m Manager[T]) Load(name string) Profile[T] {
 
 	// load
 	profiles := m.loadProfiles()
@@ -43,15 +48,15 @@ func (m Manager[T]) Load(name string) T {
 	}
 
 	// enrich
-	profile = m.inject(profile)
+	profile.Name = name
+	profile.Data = m.inject(profile.Data)
 
 	return profile
 }
 
-func (m Manager[T]) Update(profile T) {
+func (m Manager[T]) Update(profile Profile[T]) {
 	profileList := m.loadProfiles()
-	current := profileList.Current
-	profileList.Profiles[current] = profile
+	profileList.Profiles[profile.Name] = profile
 	m.saveProfiles(profileList, false)
 }
 
