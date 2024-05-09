@@ -35,15 +35,10 @@ func NewManager[T any](appName string, options ...Option[T]) *Manager[T] {
 
 func (m Manager[T]) LoadCurrent() Profile[T] {
 	profiles := m.loadProfiles()
-	return m.Load(profiles.Current, false)
+	return m.Load(profiles.Current)
 }
 
-func (m Manager[T]) LoadCurrentRaw() Profile[T] {
-	profiles := m.loadProfiles()
-	return m.Load(profiles.Current, true)
-}
-
-func (m Manager[T]) Load(name string, loadRaw bool) Profile[T] {
+func (m Manager[T]) Load(name string) Profile[T] {
 
 	// load
 	profiles := m.loadProfiles()
@@ -54,9 +49,7 @@ func (m Manager[T]) Load(name string, loadRaw bool) Profile[T] {
 
 	// enrich
 	profile.Name = name
-	if !loadRaw {
-		profile.Data = m.inject(profile.Data)
-	}
+	profile.Data = m.inject(profile.Data)
 
 	return profile
 }
