@@ -33,6 +33,10 @@ func NewManager[T any](appName string, options ...Option[T]) *Manager[T] {
 	return m
 }
 
+func (m Manager[T]) LoadFile(filePath string) (T, error) {
+	return m.loadFile(filePath)
+}
+
 func (m Manager[T]) LoadCurrent() Profile[T] {
 	profiles := m.loadProfiles()
 	return m.Load(profiles.Current, false)

@@ -39,6 +39,23 @@ func (m Manager[T]) loadProfiles() profileCollection[T] {
 
 	return col
 }
+func (m Manager[T]) loadFile(filePath string) (T, error) {
+
+	var profile T
+
+	// load file
+	raw, err := os.ReadFile(filePath)
+	if err != nil {
+		return profile, err
+	}
+
+	// parse
+	if err := yaml.Unmarshal(raw, &profile); err != nil {
+		return profile, err
+	}
+
+	return profile, nil
+}
 
 func (m Manager[T]) saveProfiles(settings profileCollection[T], isFallback bool) {
 
