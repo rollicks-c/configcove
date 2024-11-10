@@ -65,6 +65,10 @@ func (m *Manager) LoadSecret(name string) (string, bool) {
 
 func (m *Manager) SaveSecret(name, value string) {
 	filePath := m.createSecretsFilePath(name)
+	err := os.Chmod(filePath, 0600)
+	if err != nil {
+		panic(fmt.Errorf("failed to change file mode: %v", err))
+	}
 	if err := os.WriteFile(filePath, []byte(value), 0400); err != nil {
 		panic(fmt.Errorf("failed to write file: %v", err))
 	}
